@@ -50,6 +50,19 @@ describe('GET /jobs', () => {
       })
       .end(done);
   });
+
+  it('should get paginated jobs and include offset', done => {
+    request(app)
+      .get('/jobs?offset=1&limit=2')
+      .expect(200)
+      .expect(res => {
+        expect(res.body.jobs.length).to.be.equal(2);
+        expect(Number(res.body.offset)).to.be.equal(1);
+        expect(Number(res.body.limit)).to.be.equal(2);
+        expect(res.body.jobs[0].title).to.be.equal(mockedJobs[1].title)
+      })
+      .end(done)
+  })
 });
 
 describe('GET /jobs/:jobId', () => {

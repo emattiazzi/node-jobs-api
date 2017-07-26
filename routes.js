@@ -3,11 +3,16 @@ const router = require('express').Router();
 const Job = require('./job/job.model');
 
 router.get('/jobs', (req, res) => {
-  const { limit } = req.query;
-  Job.find({}).limit(+limit).then(
+  const { offset, limit } = req.query;
+  if (offset < 0 || limit < 0) {
+    res.status(400).json({error: 'BAD_REQUEST'})
+  }
+  Job.find({}).limit(Number(limit)).skip(Number(offset)).then(
     jobs =>
       res.status(200).json({
-        jobs
+        jobs,
+        offset,
+        limit
       }),
     e => res.status(400).json(e)
   );
