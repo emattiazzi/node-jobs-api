@@ -6,13 +6,20 @@
   "dependencies": {
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
+    "mongodb": "^2.2.30",
     "mongoose": "^4.11.4",
     "morgan": "^1.8.2"
   },
   "devDependencies": {
+    "chai": "^4.1.0",
     "eslint": "^4.3.0",
     "eslint-plugin-node": "^5.1.1",
-    "nodemon": "^1.11.0"
+    "mocha": "^3.4.2",
+    "nodemon": "^1.11.0",
+    "rewire": "^2.5.2",
+    "sinon": "^2.4.1",
+    "sinon-chai": "^2.12.0",
+    "supertest": "^3.0.0"
   },
   "scripts": {
     "dev": "nodemon ./index.js"
