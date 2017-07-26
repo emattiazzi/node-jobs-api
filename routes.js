@@ -14,7 +14,15 @@ router.get('/jobs', (req, res) => {
 });
 
 router.post('/jobs', (req, res) => {
-  const {title, location, description, category, company, email, url } = req.body;
+  const {
+    title,
+    location,
+    description,
+    category,
+    company,
+    email,
+    url
+  } = req.body;
   const newJob = new Job({
     title,
     location,
@@ -29,7 +37,7 @@ router.post('/jobs', (req, res) => {
       res.status(200).json({
         job
       }),
-    e => res.status(400).json({ error: 'BAD_REQUEST'})
+    e => res.status(400).json({ error: 'BAD_REQUEST' })
   );
 });
 
@@ -41,6 +49,25 @@ router.get('/jobs/:jobId', (req, res) => {
   }
 
   Job.findById(id)
+    .then(job => {
+      if (!job) {
+        return res.status(404).json({ error: 'NOT_FOUND' });
+      }
+      res.status(200).json({ job });
+    })
+    .catch(e => {
+      res.status(400).json({ error: 'BAD_REQUEST' });
+    });
+});
+
+router.delete('/jobs/:jobId', (req, res) => {
+  const id = req.params.jobId;
+
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).json({ error: 'NOT_FOUND' });
+  }
+
+  Job.findByIdAndRemove(id)
     .then(job => {
       if (!job) {
         return res.status(404).json({ error: 'NOT_FOUND' });

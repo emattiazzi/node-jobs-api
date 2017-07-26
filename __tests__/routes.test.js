@@ -54,9 +54,9 @@ describe('GET /jobs', () => {
 
 describe('GET /jobs/:jobId', () => {
   it('should return given job document', done => {
-    const firstId = mockedJobs[0]._id.toHexString();
+    const id = mockedJobs[0]._id.toHexString();
     request(app)
-      .get(`/jobs/${firstId}`)
+      .get(`/jobs/${id}`)
       .expect(200)
       .expect(res => {
         expect(res.body.job.title).to.be.equal(mockedJobs[0].title);
@@ -65,13 +65,36 @@ describe('GET /jobs/:jobId', () => {
   });
 
   it('should return 404 for object not found', done => {
-    const firstId = new ObjectID().toHexString();
-    request(app).get(`/jobs/${firstId}`).expect(404).end(done);
+    const id = new ObjectID().toHexString();
+    request(app).get(`/jobs/${id}`).expect(404).end(done);
   });
 
   it('should return 404 for not valid id', done => {
-    const firstId = 123;
-    request(app).get(`/jobs/${firstId}`).expect(404).end(done);
+    const id = 123;
+    request(app).get(`/jobs/${id}`).expect(404).end(done);
+  });
+});
+
+describe('DELETE /jobs/:jobId', () => {
+  it('should return the deleted document', done => {
+    const id = mockedJobs[0]._id.toHexString();
+    request(app)
+      .delete(`/jobs/${id}`)
+      .expect(200)
+      .expect(res => {
+        expect(res.body.job.title).to.be.equal(mockedJobs[0].title);
+      })
+      .end(done);
+  });
+
+  it('should return 404 if the document is not found', done => {
+    const id = new ObjectID();
+    request(app).delete(`/jobs/${id}`).expect(404).end(done);
+  });
+
+  it('should return 404 if the id is not valid', done => {
+    const id = 132;
+    request(app).delete(`/jobs/${id}`).expect(404).end(done);
   });
 });
 
@@ -98,10 +121,6 @@ describe('POST /jobs', () => {
 
   it('should not create a new job with invalid data', done => {
     const job = {};
-    request(app)
-      .post('/jobs')
-      .send(job)
-      .expect(400)
-      .end(done)
-  })
+    request(app).post('/jobs').send(job).expect(400).end(done);
+  });
 });
