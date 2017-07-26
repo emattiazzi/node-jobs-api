@@ -12,7 +12,8 @@ router.get('/jobs', (req, res) => {
 
 router.post('/jobs', (req, res) => {
   const newJob = new Job({
-    title: req.body.title
+    title: req.body.title,
+    location: req.body.location
   });
   newJob.save()
     .then(job => res.status(200).json({
