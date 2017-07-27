@@ -1,3 +1,4 @@
+const {pick} = require('lodash');
 const { ObjectID } = require('mongodb');
 const Job = require('./job.model');
 
@@ -37,24 +38,7 @@ const findById = (req, res) => {
 };
 
 const create = (req, res) => {
-  const {
-    title,
-    location,
-    description,
-    category,
-    company,
-    email,
-    url
-  } = req.body;
-  const newJob = new Job({
-    title,
-    location,
-    description,
-    category,
-    company,
-    email,
-    url
-  });
+  const newJob = new Job(pick(req.body, Job.createSafeFields));
   newJob.save().then(
     job =>
       res.status(200).json({
@@ -83,8 +67,8 @@ const deleteById = (req, res) => {
     });
 };
 module.exports = {
-  find,
-  findById,
   create,
-  deleteById
+  deleteById,
+  find,
+  findById
 };

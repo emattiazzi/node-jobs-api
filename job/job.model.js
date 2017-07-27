@@ -29,6 +29,18 @@ const jobSchema = new mongoose.Schema({
   timestamps: true
 });
 
+jobSchema.statics = {
+  createSafeFields: [
+    'title',
+    'location',
+    'description',
+    'category',
+    'company',
+    'email',
+    'url']
+};
+
+
 const Job = mongoose.model('Job', jobSchema);
 
 module.exports = Job;
