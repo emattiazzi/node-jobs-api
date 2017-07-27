@@ -69,10 +69,10 @@ describe('GET /jobs', () => {
         expect(res.body.jobs.length).to.be.equal(2);
         expect(Number(res.body.offset)).to.be.equal(1);
         expect(Number(res.body.limit)).to.be.equal(2);
-        expect(res.body.jobs[0].title).to.be.equal(mockedJobs[1].title)
+        expect(res.body.jobs[0].title).to.be.equal(mockedJobs[1].title);
       })
-      .end(done)
-  })
+      .end(done);
+  });
 });
 
 describe('GET /jobs/:jobId', () => {
