@@ -4,6 +4,12 @@ module.exports = {
         "node": true
     },
     "extends": "eslint:recommended",
+    "globals": {
+      "describe": true,
+      "it": true,
+      "beforeEach": true,
+      "afterEach": true
+    },
     "rules": {
         "indent": [
             "error",

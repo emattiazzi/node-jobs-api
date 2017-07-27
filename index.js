@@ -12,11 +12,14 @@ const PORT = process.env.PORT || 3000;
 
 // Middlewares
 app.use(bodyParser.json());
-app.use(morgan('dev'));
+if (process.env.ENVIRONMENT !== 'test') {
+  app.use(morgan('dev'));
+}
 
 // Routes
 app.use(require('./routes'));
 
+// Start the server
 app.listen(PORT, () => {
   mongoose.connect(`mongodb://${HOSTNAME}:27017/LondonJobs`, {
     useMongoClient: true

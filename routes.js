@@ -1,24 +1,12 @@
 const router = require('express').Router();
-const Job = require('./job/job.model');
+const Job = require('./job/job.controller');
 
-router.get('/jobs', (req, res) => {
-  const {limit} = req.query;
-  Job.find({})
-        .limit(+limit)
-        .then(jobs => res.status(200).json({
-          jobs
-        }), e => res.status(400).json(e));
-});
+router.get('/jobs', Job.find);
 
-router.post('/jobs', (req, res) => {
-  const newJob = new Job({
-    title: req.body.title
-  });
-  newJob.save()
-    .then(job => res.status(200).json({
-      job
-    }), e => res.status(400).json(e));
-});
+router.post('/jobs', Job.create);
 
+router.get('/jobs/:jobId', Job.findById);
+
+router.delete('/jobs/:jobId', Job.deleteById);
 
 module.exports = router;
