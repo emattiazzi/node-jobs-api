@@ -22,6 +22,16 @@ const mockedJobs = [
   },
   {
     _id: new ObjectID(),
+    title: 'Account Manager',
+    location: 'City',
+    description: 'An horrible company',
+    category: 'operations',
+    company: 'Zoopla',
+    email: 'hello@zoopla.com',
+    url: 'https://www.zoopla.com'
+  },
+  {
+    _id: new ObjectID(),
     title: 'Product Manager',
     location: 'Holborn',
     description: 'An horrible company',
@@ -46,7 +56,7 @@ describe('GET /jobs', () => {
       .get('/jobs')
       .expect(200)
       .expect(res => {
-        expect(res.body.jobs.length).to.be.equal(2);
+        expect(res.body.jobs.length).to.be.equal(3);
       })
       .end(done);
   });
