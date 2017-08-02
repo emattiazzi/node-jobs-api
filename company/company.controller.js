@@ -1,4 +1,5 @@
 const Company = require('./company.model');
+const { map } = require('lodash');
 
 const create = (req, res) => {
   const { email, password } = req.body;
@@ -7,17 +8,23 @@ const create = (req, res) => {
     password
   });
 
-  newCompany.save()
+  newCompany
+    .save()
     .then(company => res.status(200).json({ company }))
-    .catch((e) => {
-      res.status(400).send({ message: 'BAD_REQUEST', errors: e.errors });
+    .catch(e => {
+      res
+        .status(400)
+        .send({
+          message: 'BAD_REQUEST',
+          errors: e
+        });
     });
 };
 
 const find = (req, res) => {
   Company.find()
-    .then(companies => res.status(200).json({companies}))
-    .catch(() => res.status(400).json({message: 'BAD_REQUEST'}));
+    .then(companies => res.status(200).json({ companies }))
+    .catch(() => res.status(400).json({ message: 'BAD_REQUEST' }));
 };
 
 module.exports = {

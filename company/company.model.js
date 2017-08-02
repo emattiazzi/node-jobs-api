@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const uniqueValidator = require('mongoose-unique-validator');
+
 const companySchema = new mongoose.Schema({
   email: {
     type: String,
@@ -10,7 +12,7 @@ const companySchema = new mongoose.Schema({
     validate: {
       validator: validator.isEmail,
       isAsync: false,
-      message: '{VALUE} is not a valid email'
+      message: 'EMAIL_NOT_VALID'
     }
   },
   password: {
@@ -29,6 +31,8 @@ const companySchema = new mongoose.Schema({
     }
   }]
 });
+
+companySchema.plugin(uniqueValidator);
 
 const Company = mongoose.model('Company', companySchema);
 
