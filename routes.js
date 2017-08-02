@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Job = require('./job/job.controller');
 const Company = require('./company/company.controller');
+const CompanyMiddleware = require('./company/company.middleware');
 
 router.get('/jobs', Job.find);
 
@@ -11,6 +12,7 @@ router.patch('/jobs/:jobId', Job.updateById);
 router.delete('/jobs/:jobId', Job.deleteById);
 
 router.get('/companies/', Company.find);
+router.get('/companies/me', CompanyMiddleware.authenticate ,Company.findByToken);
 router.post('/companies/', Company.create);
 
 module.exports = router;

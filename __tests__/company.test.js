@@ -35,18 +35,18 @@ describe('GET /companies', () => {
 
 describe('POST /companies', () => {
   it('should create a new company' , (done) => {
-    const newCompany = new Company({
-      email: 'a@a.com',
-      password: 'ASADASASDSADSA'
-    });
+    const email = 'enrico@test.com';
+    const password = '1234abc';
 
     request(app)
       .post('/companies')
-      .send(newCompany)
+      .send({email, password})
       .expect(200)
       .expect(res => {
-        expect(res.body.company.email).to.be.equal(newCompany.email);
-      })
+        expect(res.header['x-auth']).to.exist;
+        expect(res.body.company.email).to.be.equal(email);
+        expect(res.body.company._id).to.exist;
+      }, e => console.log(e))
       .end(done);
   });
 
