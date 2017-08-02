@@ -9,8 +9,8 @@ const create = (req, res) => {
 
   newCompany.save()
     .then(company => res.status(200).json({ company }))
-    .catch(() => {
-      res.status(400).send({ error: 'BAD_REQUEST' });
+    .catch((e) => {
+      res.status(400).send({ message: 'BAD_REQUEST', errors: e.errors });
     });
 };
 

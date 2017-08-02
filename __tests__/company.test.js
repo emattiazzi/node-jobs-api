@@ -36,8 +36,8 @@ describe('GET /companies', () => {
 describe('POST /companies', () => {
   it('should create a new company' , (done) => {
     const newCompany = new Company({
-      email: 'a',
-      password: 'b'
+      email: 'a@a.com',
+      password: 'ASADASASDSADSA'
     });
 
     request(app)
