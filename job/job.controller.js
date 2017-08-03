@@ -66,9 +66,30 @@ const deleteById = (req, res) => {
       res.status(400).json({ error: 'BAD_REQUEST' });
     });
 };
+
+const updateById = (req, res) => {
+  const id = req.params.jobId;
+  const body =  pick(req.body, Job.createSafeFields);
+
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).json({ error: 'NOT_VALID' });
+  }
+
+  Job.findByIdAndUpdate(id, {$set: body}, {new: true})
+    .then(job => {
+      if (!job) {
+        return res.status(404).json({ error: 'NOT_FOUND' });
+      }
+
+      res.status(200).json(job);
+    })
+    .catch(e => res.status(400).json({ error: 'BAD_REQUEST' }));
+};
+
 module.exports = {
   create,
   deleteById,
   find,
-  findById
+  findById,
+  updateById
 };

@@ -23,6 +23,8 @@ app.use(require('./routes'));
 app.listen(PORT, () => {
   mongoose.connect(`mongodb://${HOSTNAME}:27017/LondonJobs`, {
     useMongoClient: true
+  }).catch(() => {
+    process.exit(1);
   });
 });
 

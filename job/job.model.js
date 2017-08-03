@@ -40,7 +40,6 @@ jobSchema.statics = {
     'url']
 };
 
-
 const Job = mongoose.model('Job', jobSchema);
 
 module.exports = Job;
