@@ -1,5 +1,4 @@
 const Company = require('./company.model');
-const { map } = require('lodash');
 
 const create = (req, res) => {
   const { email, password } = req.body;
@@ -30,7 +29,8 @@ const find = (req, res) => {
 
 const findByToken = (req, res) => {
   res.json(req.company);
-}
+};
+
 module.exports = {
   create,
   find,

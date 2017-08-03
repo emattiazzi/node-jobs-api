@@ -8,13 +8,13 @@ const authenticateCompany = (req, res, next) => {
     }
 
     req.company = company;
-    req.token = token
+    req.token = token;
     next();
-  }).catch((e) => {
-    res.status(401).json({message: 'NOT_AUTHORIZED'})
-  })
+  }).catch(() => {
+    res.status(401).json({message: 'NOT_AUTHORIZED'});
+  });
 };
 
 module.exports = {
   authenticate: authenticateCompany
-}
+};

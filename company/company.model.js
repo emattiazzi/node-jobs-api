@@ -59,9 +59,8 @@ companySchema.methods.generateAuthToken = function() {
 companySchema.statics.findByToken = function (token) {
   const Company = this;
   let decoded;
-  
   try {
-    decoded = jwt.verify(token, 'MY_SECRET_VALUE')
+    decoded = jwt.verify(token, 'MY_SECRET_VALUE');
   } catch (e) {
     return Promise.reject();
   }
@@ -70,9 +69,9 @@ companySchema.statics.findByToken = function (token) {
     '_id': new ObjectID(decoded._id),
     'tokens.access': 'auth',
     'tokens.token': token
-  })
-  
-}
+  });
+};
+
 const Company = mongoose.model('Company', companySchema);
 
 module.exports = Company;
