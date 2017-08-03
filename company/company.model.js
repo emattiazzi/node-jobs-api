@@ -3,6 +3,7 @@ const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const uniqueValidator = require('mongoose-unique-validator');
 const {pick} = require('lodash');
+const bcrypt = require('bcryptjs');
 const { ObjectID } = require('mongodb');
 
 const companySchema = new mongoose.Schema({
@@ -38,6 +39,22 @@ const companySchema = new mongoose.Schema({
 });
 
 companySchema.plugin(uniqueValidator);
+
+companySchema.pre('save', function (next) {
+  const company = this;
+  
+  if (company.isModified('password')) {
+    bcrypt.genSalt(13, (err, salt) => {
+      bcrypt.hash(company.password, salt, (err, hash) => {
+        company.password = hash;
+        next();
+      })
+    })
+  } else {
+    next();
+  }
+
+});
 
 companySchema.methods.toJSON = function () {
   let company = this;
