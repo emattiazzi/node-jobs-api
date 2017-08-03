@@ -14,5 +14,6 @@ router.delete('/jobs/:jobId', Job.deleteById);
 router.get('/companies/', Company.find);
 router.get('/companies/me', CompanyMiddleware.authenticate, Company.findByToken);
 router.post('/companies/', Company.create);
+router.post('/companies/login', Company.login);
 
 module.exports = router;

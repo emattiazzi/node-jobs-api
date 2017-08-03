@@ -38,8 +38,14 @@ const companySchema = new mongoose.Schema({
   ]
 });
 
+/**
+ * Attach plugins
+ */
 companySchema.plugin(uniqueValidator);
 
+/**
+ * Mongoose Middleware
+ */
 companySchema.pre('save', function(next) {
   const company = this;
 
@@ -55,6 +61,9 @@ companySchema.pre('save', function(next) {
   }
 });
 
+/**
+ * Instance methods
+ */
 companySchema.methods.toJSON = function() {
   let company = this;
   let companyObject = company.toObject();
@@ -72,6 +81,30 @@ companySchema.methods.generateAuthToken = function() {
   return company.save().then(() => token);
 };
 
+/**
+ * Static methods
+ */
+
+ companySchema.statics.findByCredentials = function (email, password) {
+   const Company = this;
+
+   return Company.findOne({
+     email
+   }).then((company) => {
+     if (!company) {
+      return Promise.reject({message: 'COMPANY_NOT_FOUND'})
+     }
+    return new Promise((resolve, reject) => {
+      bcrypt.compare(password, company.password, (err, res) => {
+        if (res) {
+          resolve(company)
+        } else {
+          reject();
+        }
+        })
+    })
+   })
+ }
 companySchema.statics.findByToken = function(token) {
   const Company = this;
   let decoded;

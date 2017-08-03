@@ -1,4 +1,6 @@
 const Company = require('./company.model');
+const bcrypt = require('bcryptjs');
+const { pick } = require('lodash');
 
 const create = (req, res) => {
   const { email, password } = req.body;
@@ -31,8 +33,22 @@ const findByToken = (req, res) => {
   res.json(req.company);
 };
 
+const login = (req, res) => {
+  const body = pick(req.body, ['email', 'password']);
+  Company.findByCredentials(body.email, body.password)
+    .then((company) => {
+      return company.generateAuthToken(company.token).then((token) => {
+        res.header('x-auth', token).status(200).json({ company });
+      })
+    })
+    .catch((e) => {
+      res.status(401).send({ message: 'WRONG_CREDENTIALS' });
+    })
+};
+
 module.exports = {
   create,
   find,
-  findByToken
+  findByToken,
+  login
 };
