@@ -12,7 +12,7 @@ router.patch('/jobs/:jobId', Job.updateById);
 router.delete('/jobs/:jobId', Job.deleteById);
 
 router.get('/companies/', Company.find);
-router.get('/companies/me', CompanyMiddleware.authenticate ,Company.findByToken);
+router.get('/companies/me', CompanyMiddleware.authenticate, Company.findByToken);
 router.post('/companies/', Company.create);
 
 module.exports = router;
