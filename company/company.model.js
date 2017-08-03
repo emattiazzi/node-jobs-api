@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const uniqueValidator = require('mongoose-unique-validator');
-const {pick} = require('lodash');
+const { pick } = require('lodash');
+const bcrypt = require('bcryptjs');
 const { ObjectID } = require('mongodb');
 
 const companySchema = new mongoose.Schema({
@@ -39,7 +40,22 @@ const companySchema = new mongoose.Schema({
 
 companySchema.plugin(uniqueValidator);
 
-companySchema.methods.toJSON = function () {
+companySchema.pre('save', function(next) {
+  const company = this;
+
+  if (company.isModified('password')) {
+    bcrypt.genSalt(13, (err, salt) => {
+      bcrypt.hash(company.password, salt, (err, hash) => {
+        company.password = hash;
+        next();
+      });
+    });
+  } else {
+    next();
+  }
+});
+
+companySchema.methods.toJSON = function() {
   let company = this;
   let companyObject = company.toObject();
 
@@ -56,7 +72,7 @@ companySchema.methods.generateAuthToken = function() {
   return company.save().then(() => token);
 };
 
-companySchema.statics.findByToken = function (token) {
+companySchema.statics.findByToken = function(token) {
   const Company = this;
   let decoded;
   try {
@@ -66,7 +82,7 @@ companySchema.statics.findByToken = function (token) {
   }
 
   return Company.findOne({
-    '_id': new ObjectID(decoded._id),
+    _id: new ObjectID(decoded._id),
     'tokens.access': 'auth',
     'tokens.token': token
   });

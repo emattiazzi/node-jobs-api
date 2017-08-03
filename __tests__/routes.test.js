@@ -7,48 +7,11 @@ const { ObjectID } = require('mongodb');
 const app = require('../index.js');
 const Job = require('./../job/job.model');
 
+const {jobs, populateJobs} = require('./seed/seed');
+
 chai.use(sinonChai);
 
-const mockedJobs = [
-  {
-    _id: new ObjectID(),
-    title: 'Front-end developer',
-    location: 'Shoreditch',
-    description: 'An amazing company',
-    category: 'engineering',
-    company: 'busuu',
-    email: 'dan@busuu.com',
-    url: 'https://www.busuu.com'
-  },
-  {
-    _id: new ObjectID(),
-    title: 'Account Manager',
-    location: 'City',
-    description: 'An horrible company',
-    category: 'operations',
-    company: 'Zoopla',
-    email: 'hello@zoopla.com',
-    url: 'https://www.zoopla.com'
-  },
-  {
-    _id: new ObjectID(),
-    title: 'Product Manager',
-    location: 'Holborn',
-    description: 'An horrible company',
-    category: 'management',
-    company: 'Google',
-    email: 'hello@google.com',
-    url: 'https://www.google.com'
-  }
-];
-
-beforeEach(done => {
-  Job.remove({})
-    .then(() => {
-      return Job.insertMany(mockedJobs);
-    })
-    .then(() => done());
-});
+beforeEach(populateJobs);
 
 describe('GET /jobs', () => {
   it('should get all jobs', done => {
@@ -69,7 +32,7 @@ describe('GET /jobs', () => {
         expect(res.body.jobs.length).to.be.equal(2);
         expect(Number(res.body.offset)).to.be.equal(1);
         expect(Number(res.body.limit)).to.be.equal(2);
-        expect(res.body.jobs[0].title).to.be.equal(mockedJobs[1].title);
+        expect(res.body.jobs[0].title).to.be.equal(jobs[1].title);
       })
       .end(done);
   });
@@ -77,12 +40,12 @@ describe('GET /jobs', () => {
 
 describe('GET /jobs/:jobId', () => {
   it('should return given job document', done => {
-    const id = mockedJobs[0]._id.toHexString();
+    const id = jobs[0]._id.toHexString();
     request(app)
       .get(`/jobs/${id}`)
       .expect(200)
       .expect(res => {
-        expect(res.body.job.title).to.be.equal(mockedJobs[0].title);
+        expect(res.body.job.title).to.be.equal(jobs[0].title);
       })
       .end(done);
   });
@@ -100,12 +63,12 @@ describe('GET /jobs/:jobId', () => {
 
 describe('DELETE /jobs/:jobId', () => {
   it('should return the deleted document', done => {
-    const id = mockedJobs[0]._id.toHexString();
+    const id = jobs[0]._id.toHexString();
     request(app)
       .delete(`/jobs/${id}`)
       .expect(200)
       .expect(res => {
-        expect(res.body.job.title).to.be.equal(mockedJobs[0].title);
+        expect(res.body.job.title).to.be.equal(jobs[0].title);
       })
       .end(done);
   });
