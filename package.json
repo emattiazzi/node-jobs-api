@@ -29,7 +29,7 @@
   "scripts": {
     "dev": "nodemon ./index.js ",
     "lint:fix": "eslint **/*.js --fix",
-    "test": "ENVIRONMENT=test mocha ./__tests__/*.test.js",
+    "test": "ENVIRONMENT=test mocha ./**/__tests__/*.test.js",
     "test:watch": "nodemon --exec \"npm test\""
   }
 }
