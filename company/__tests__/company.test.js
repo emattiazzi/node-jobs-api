@@ -38,7 +38,7 @@ describe('Company', () => {
           }
 
           Company.findOne({email}).then(company => {
-            expect(company).to.be.exist;
+            expect(company).to.exist;
             expect(company.password).to.not.be.equal(password);
             done();
           });
@@ -84,4 +84,61 @@ describe('Company', () => {
     });
   });
 
+  describe('POST /companies/login', () => {
+    it('should authenticate the company', done => {
+      const credentials = {
+        email: companies[1].email,
+        password: companies[1].password
+      };
+      request(app)
+        .post('/companies/login')
+        .send(credentials)
+        .expect(200)
+        .expect(res => {
+          expect(res.header['x-auth']).to.exist;
+
+          Company.findOne({'tokens.token': res.header['x-auth']})
+            .then(company => {
+              expect(company).to.exist;
+            });
+        })
+        .end(done);
+    });
+
+    it('should return 401 if the password is wrong', done => {
+      const credentials = {
+        email: companies[1].email,
+        password: companies[1].password + 'A'
+      };
+      request(app)
+        .post('/companies/login')
+        .send(credentials)
+        .expect(401)
+        .end(done);
+    });
+
+    it('should return 401 if the email is wrong', done => {
+      const credentials = {
+        email: companies[1].email + 'A',
+        password: companies[1].password
+      };
+      request(app)
+        .post('/companies/login')
+        .send(credentials)
+        .expect(401)
+        .end(done);
+    });
+
+    it('should return 401 if the email and password doesn\'t exist', done => {
+      const credentials = {
+        email: companies[1].email + 'A',
+        password: companies[1].password + 'A'
+      };
+      request(app)
+        .post('/companies/login')
+        .send(credentials)
+        .expect(401)
+        .end(done);
+    });
+  });
 });

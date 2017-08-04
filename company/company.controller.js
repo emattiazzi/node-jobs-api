@@ -1,5 +1,4 @@
 const Company = require('./company.model');
-const bcrypt = require('bcryptjs');
 const { pick } = require('lodash');
 
 const create = (req, res) => {
@@ -39,11 +38,11 @@ const login = (req, res) => {
     .then((company) => {
       return company.generateAuthToken(company.token).then((token) => {
         res.header('x-auth', token).status(200).json({ company });
-      })
+      });
     })
     .catch((e) => {
       res.status(401).send({ message: 'WRONG_CREDENTIALS' });
-    })
+    });
 };
 
 module.exports = {
