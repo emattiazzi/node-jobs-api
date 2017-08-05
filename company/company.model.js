@@ -81,6 +81,16 @@ companySchema.methods.generateAuthToken = function() {
   return company.save().then(() => token);
 };
 
+companySchema.methods.removeToken = function (token) {
+  const user = this;
+  return user.update({
+    $pull: {
+      tokens: {
+        token
+      }
+    }
+  })
+}
 /**
  * Static methods
  */

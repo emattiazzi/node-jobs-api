@@ -162,4 +162,33 @@ describe('Company', () => {
         .end(done);
     });
   });
+
+  describe('DELETE /companies/logout', () => {
+    it('remove auth token on logout', (done) => {
+      request(app)
+        .delete('/companies/logout')
+        .set('x-auth', companies[0].tokens[0].token)
+        .expect(200)
+        .end((err, res) => {
+          if (err) {
+            return done(err)
+          }
+
+          Company.findById(companies[0]._id)
+            .then(company => {
+              expect(company.tokens.length).to.be.equal(0);
+              done();
+            })
+            .catch(e => done(e))
+        })
+    })
+
+    it('returns 401 if token is not valid', (done) => {
+      request(app)
+        .delete('/companies/logout')
+        .set('x-auth', companies[0].tokens[0].token + 'a')
+        .expect(401)
+        .end(done)
+    })
+  })
 });

@@ -22,6 +22,14 @@ const create = (req, res) => {
     });
 };
 
+const logout = (req, res) => {
+  req.company.removeToken(req.token).then(() => {
+    res.status(200).send();
+  }, () => {
+    res.status(400).send()
+  })
+};
+
 const find = (req, res) => {
   Company.find()
     .then(companies => res.status(200).json({ companies }))
@@ -45,9 +53,11 @@ const login = (req, res) => {
     });
 };
 
+
 module.exports = {
   create,
   find,
   findByToken,
-  login
+  login,
+  logout
 };
