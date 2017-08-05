@@ -5,7 +5,7 @@ const CompanyMiddleware = require('./company/company.middleware');
 
 router.get('/jobs', Job.find);
 
-router.post('/jobs', Job.create);
+router.post('/jobs', CompanyMiddleware.authenticate, Job.create);
 
 router.get('/jobs/:jobId', Job.findById);
 router.patch('/jobs/:jobId', Job.updateById);

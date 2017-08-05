@@ -17,9 +17,9 @@ const jobSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  company: {
-    type: String,
-    required: true
+  _creator: {
+    required: true,
+    type: mongoose.Schema.Types.ObjectId
   },
   email: {
     type: String,

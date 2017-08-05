@@ -75,7 +75,7 @@ companySchema.methods.generateAuthToken = function() {
   let company = this;
   const access = 'auth';
   const token = jwt
-    .sign({ _id: company._id.toHexString(), access }, 'MY_SECRET_VALUE')
+    .sign({ _id: company._id.toHexString(), access }, process.env.JWT_SECRET)
     .toString();
   company.tokens.push({ access, token });
   return company.save().then(() => token);
@@ -119,7 +119,7 @@ companySchema.statics.findByToken = function(token) {
   const Company = this;
   let decoded;
   try {
-    decoded = jwt.verify(token, 'MY_SECRET_VALUE');
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
   } catch (e) {
     return Promise.reject();
   }

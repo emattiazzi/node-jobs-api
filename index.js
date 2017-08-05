@@ -3,16 +3,16 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 
 const mongoose = require('./config/db.config');
-
+const env = require('./config/env.config.js')
 const app = express();
 
 // Environment settings
-const HOSTNAME = process.env.HOSTNAME || 'localhost';
-const PORT = process.env.PORT || 3000;
+const MONGODB_URI = process.env.MONGODB_URI
+const PORT = process.env.PORT
 
 // Middlewares
 app.use(bodyParser.json());
-if (process.env.ENVIRONMENT !== 'test') {
+if (process.env.NODE_ENV !== 'test') {
   app.use(morgan('dev'));
 }
 
@@ -21,7 +21,7 @@ app.use(require('./routes'));
 
 // Start the server
 app.listen(PORT, () => {
-  mongoose.connect(`mongodb://${HOSTNAME}:27017/LondonJobs`, {
+  mongoose.connect(MONGODB_URI, {
     useMongoClient: true
   }).catch(() => {
     process.exit(1);

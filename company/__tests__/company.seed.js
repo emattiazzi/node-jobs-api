@@ -10,7 +10,7 @@ const companies = [
     password: 'companyOnePass',
     tokens: [{
       access: 'auth',
-      token: jwt.sign({_id: companyOneId, access: 'auth'}, 'MY_SECRET_VALUE').toString()
+      token: jwt.sign({_id: companyOneId, access: 'auth'}, process.env.JWT_SECRET).toString()
     }]
   },
   {

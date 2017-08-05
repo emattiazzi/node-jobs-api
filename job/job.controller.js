@@ -39,13 +39,15 @@ const findById = (req, res) => {
 
 const create = (req, res) => {
   const newJob = new Job(pick(req.body, Job.createSafeFields));
+  newJob._creator = req.company._id;
   newJob.save().then(
     job =>
       res.status(200).json({
         job
       }),
-    () => res.status(400).json({ error: 'BAD_REQUEST' })
-  );
+    (e) => {
+      res.status(400).json({ error: 'BAD_REQUEST' });
+    });
 };
 
 const deleteById = (req, res) => {

@@ -7,13 +7,14 @@ const { ObjectID } = require('mongodb');
 const app = require('../../index.js');
 
 const {jobs, populateJobs} = require('./job.seed');
+const {companies, populateCompanies} = require('../../company/__tests__/company.seed');
 
 chai.use(sinonChai);
 
 describe('Job', () => {
 
   beforeEach(populateJobs);
-
+  beforeEach(populateCompanies);
   describe('GET /jobs', () => {
     it('should get all jobs', done => {
       request(app)
@@ -48,10 +49,12 @@ describe('Job', () => {
         category: 'engineering',
         company: 'Yoox',
         email: 'hello@yoox.com',
-        url: 'https://www.yoox.com'
+        url: 'https://www.yoox.com',
+        _creator: new ObjectID()
       };
       request(app)
         .post('/jobs')
+        .set('x-auth', companies[0].tokens[0].token)
         .send(newJob)
         .expect(200)
         .expect(res => {
@@ -62,7 +65,11 @@ describe('Job', () => {
 
     it('should not create a new job with invalid data', done => {
       const job = {};
-      request(app).post('/jobs').send(job).expect(400).end(done);
+      request(app)
+        .post('/jobs')
+        .set('x-auth', companies[0].tokens[0].token)
+        .send(job)
+        .expect(400).end(done);
     });
   });
 
