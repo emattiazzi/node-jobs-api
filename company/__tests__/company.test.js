@@ -96,13 +96,23 @@ describe('Company', () => {
         .expect(200)
         .expect(res => {
           expect(res.header['x-auth']).to.exist;
-
-          Company.findOne({'tokens.token': res.header['x-auth']})
-            .then(company => {
-              expect(company).to.exist;
-            });
         })
-        .end(done);
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+
+
+          Company.findById(companies[1]._id)
+            .then(company => {
+              expect(company.tokens[0]).to.include({
+                access: 'auth',
+                token: res.header['x-auth']
+              });
+              done();
+            }).catch(e => done(e));
+
+        });
     });
 
     it('should return 401 if the password is wrong', done => {
@@ -114,7 +124,18 @@ describe('Company', () => {
         .post('/companies/login')
         .send(credentials)
         .expect(401)
-        .end(done);
+        .expect(res => {
+          expect(res.header['x-auth']).to.not.exist;
+        })
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          Company.findById(companies[1]._id).then((company) => {
+            expect(company.tokens.length).to.be.equal(0);
+            done();
+          }).catch(e => done(e))
+        });
     });
 
     it('should return 401 if the email is wrong', done => {
