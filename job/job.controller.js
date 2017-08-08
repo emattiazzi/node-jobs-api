@@ -18,6 +18,23 @@ const find = (req, res) => {
   );
 };
 
+const findByCompanyToken = (req,res) => {
+  const { offset, limit } = req.query;
+  const _creator = req.company._id;
+  if (offset < 0 || limit < 0) {
+    res.status(400).json({ error: 'BAD_REQUEST' });
+  }
+  Job.find({_creator}).limit(Number(limit)).skip(Number(offset)).then(
+    jobs =>
+      res.status(200).json({
+        jobs,
+        offset,
+        limit
+      }),
+    e => res.status(400).json(e)
+  );
+};
+
 const findById = (req, res) => {
   const id = req.params.jobId;
 
@@ -57,7 +74,10 @@ const deleteById = (req, res) => {
     return res.status(404).json({ error: 'NOT_FOUND' });
   }
 
-  Job.findByIdAndRemove(id)
+  Job.findOneAndRemove({
+    _id: id,
+    _creator: req.company._id
+  })
     .then(job => {
       if (!job) {
         return res.status(404).json({ error: 'NOT_FOUND' });
@@ -77,7 +97,10 @@ const updateById = (req, res) => {
     return res.status(404).json({ error: 'NOT_VALID' });
   }
 
-  Job.findByIdAndUpdate(id, {$set: body}, {new: true})
+  Job.findOneAndUpdate({
+    _id: id,
+    _creator: req.company._id
+  }, {$set: body}, {new: true})
     .then(job => {
       if (!job) {
         return res.status(404).json({ error: 'NOT_FOUND' });
@@ -93,5 +116,6 @@ module.exports = {
   deleteById,
   find,
   findById,
+  findByCompanyToken,
   updateById
 };

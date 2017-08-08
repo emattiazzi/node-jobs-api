@@ -65,10 +65,10 @@ describe('Company', () => {
 
   });
 
-  describe('GET /companies/me', () => {
+  describe('GET /me', () => {
     it('should return an company if authenticated', done => {
       request(app)
-        .get('/companies/me')
+        .get('/me')
         .set('x-auth', companies[0].tokens[0].token)
         .expect(200)
         .expect((res) => expect(res.body.email).to.be.equal(companies[0].email))
@@ -77,21 +77,21 @@ describe('Company', () => {
 
     it('should return a 401 if not authenticated', done => {
       request(app)
-        .get('/companies/me')
+        .get('/me')
         .expect(401)
         .expect(res => expect(res.body.message).to.be.equal('NOT_AUTHORIZED'))
         .end(done);
     });
   });
 
-  describe('POST /companies/login', () => {
+  describe('POST /login', () => {
     it('should authenticate the company', done => {
       const credentials = {
         email: companies[1].email,
         password: companies[1].password
       };
       request(app)
-        .post('/companies/login')
+        .post('/login')
         .send(credentials)
         .expect(200)
         .expect(res => {
@@ -102,10 +102,9 @@ describe('Company', () => {
             return done(err);
           }
 
-
           Company.findById(companies[1]._id)
             .then(company => {
-              expect(company.tokens[0]).to.include({
+              expect(company.tokens[1]).to.include({
                 access: 'auth',
                 token: res.header['x-auth']
               });
@@ -121,7 +120,7 @@ describe('Company', () => {
         password: companies[1].password + 'A'
       };
       request(app)
-        .post('/companies/login')
+        .post('/login')
         .send(credentials)
         .expect(401)
         .expect(res => {
@@ -132,7 +131,7 @@ describe('Company', () => {
             return done(err);
           }
           Company.findById(companies[1]._id).then((company) => {
-            expect(company.tokens.length).to.be.equal(0);
+            expect(company.tokens.length).to.be.equal(1);
             done();
           }).catch(e => done(e))
         });
@@ -144,7 +143,7 @@ describe('Company', () => {
         password: companies[1].password
       };
       request(app)
-        .post('/companies/login')
+        .post('/login')
         .send(credentials)
         .expect(401)
         .end(done);
@@ -156,17 +155,17 @@ describe('Company', () => {
         password: companies[1].password + 'A'
       };
       request(app)
-        .post('/companies/login')
+        .post('/login')
         .send(credentials)
         .expect(401)
         .end(done);
     });
   });
 
-  describe('DELETE /companies/logout', () => {
+  describe('DELETE /logout', () => {
     it('remove auth token on logout', (done) => {
       request(app)
-        .delete('/companies/logout')
+        .delete('/logout')
         .set('x-auth', companies[0].tokens[0].token)
         .expect(200)
         .end((err, res) => {
@@ -185,7 +184,7 @@ describe('Company', () => {
 
     it('returns 401 if token is not valid', (done) => {
       request(app)
-        .delete('/companies/logout')
+        .delete('/logout')
         .set('x-auth', companies[0].tokens[0].token + 'a')
         .expect(401)
         .end(done)

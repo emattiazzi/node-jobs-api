@@ -6,23 +6,21 @@ const jobSchema = new mongoose.Schema({
     required: true
   },
   location: {
-    type: String,
-    required: true
+    type: String
   },
   description: {
-    type: String,
-    required: true
+    type: String
   },
   category: {
-    type: String,
-    required: true
+    type: String
   },
   _creator: {
-    required: true,
-    type: mongoose.Schema.Types.ObjectId
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
   },
-  email: {
-    type: String,
+  published: {
+    type: Boolean,
+    default: false
   },
   url: String
 }, {

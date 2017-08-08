@@ -1,9 +1,9 @@
 const { ObjectID } = require('mongodb');
 const Job = require('../job.model');
-// const companies = require('../company/__tests__/company.seed');
+const {companies} = require('../../company/__tests__/company.seed');
 
-const companyOneId = new ObjectID();
-const companyTwoId = new ObjectID();
+const companyOneId = companies[0]._id;
+const companyTwoId = companies[1]._id;
 
 const jobs = [
   {

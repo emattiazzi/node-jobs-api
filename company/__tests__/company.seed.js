@@ -3,6 +3,8 @@ const Company = require('../../company/company.model');
 const { ObjectID } = require('mongodb');
 
 const companyOneId = new ObjectID();
+const companyTwoId = new ObjectID();
+
 const companies = [
   {
     _id: companyOneId,
@@ -14,9 +16,13 @@ const companies = [
     }]
   },
   {
-    _id: new ObjectID(),
+    _id: companyTwoId,
     email: 'companyTwo@test.com',
-    password: 'companyTwoPass'
+    password: 'companyTwoPass',
+    tokens: [{
+      access: 'auth',
+      token: jwt.sign({_id: companyTwoId, access: 'auth'}, process.env.JWT_SECRET).toString()
+    }]
   },
   {
     _id: new ObjectID(),
