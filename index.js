@@ -2,14 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
-const cors = require('cors');
 const mongoose = require('./config/db.config');
-const env = require('./config/env.config.js')
+const env = require('./config/env.config.js');
 const app = express();
 
 // Environment settings
-const MONGODB_URI = process.env.MONGODB_URI
-const PORT = process.env.PORT
+const MONGODB_URI = process.env.MONGODB_URI;
+const PORT = process.env.PORT;
 
 // Middlewares
 app.use(cors({
