@@ -71,7 +71,7 @@ describe('Job', () => {
               expect(job).to.exist;
               done();
             })
-            .catch(e => done(e))
+            .catch(e => done(e));
         });
     });
 
@@ -121,11 +121,11 @@ describe('Job', () => {
         .send(body)
         .expect(200)
         .end((err, res) => {
-          expect(res.body.title).to.be.equal(body.title)
+          expect(res.body.title).to.be.equal(body.title);
           done();
         });
     });
-  
+
     it('should return 404 if not access', done => {
       const id = jobs[1]._id.toHexString();
       const body = {
@@ -141,7 +141,7 @@ describe('Job', () => {
           done();
         });
     });
-  })
+  });
 
   describe('DELETE /jobs/:jobId', () => {
     it('should return the deleted document', done => {
@@ -155,12 +155,12 @@ describe('Job', () => {
         })
         .end((err, res) => {
           if (err) {
-            return done(err)
+            return done(err);
           }
 
           Job.findById(id).then(job => {
             expect(job).to.not.exist;
-            done()
+            done();
           }).catch(e => done(e));
         });
     });
@@ -173,14 +173,14 @@ describe('Job', () => {
         .expect(404)
         .end((err, res) => {
           if (err) {
-            return done(err)
+            return done(err);
           }
 
           Job.findById(id).then(job => {
             expect(job).to.exist;
-            done()
+            done();
           }).catch(e => done(e));
-        });    
+        });
     });
 
 

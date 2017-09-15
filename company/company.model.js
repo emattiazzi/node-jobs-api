@@ -89,32 +89,32 @@ companySchema.methods.removeToken = function (token) {
         token
       }
     }
-  })
-}
+  });
+};
 /**
  * Static methods
  */
 
- companySchema.statics.findByCredentials = function (email, password) {
-   const Company = this;
+companySchema.statics.findByCredentials = function (email, password) {
+  const Company = this;
 
-   return Company.findOne({
-     email
-   }).then((company) => {
-     if (!company) {
-      return Promise.reject({message: 'COMPANY_NOT_FOUND'})
-     }
+  return Company.findOne({
+    email
+  }).then((company) => {
+    if (!company) {
+      return Promise.reject({message: 'COMPANY_NOT_FOUND'});
+    }
     return new Promise((resolve, reject) => {
       bcrypt.compare(password, company.password, (err, res) => {
         if (res) {
-          resolve(company)
+          resolve(company);
         } else {
           reject();
         }
-        })
-    })
-   })
- }
+      });
+    });
+  });
+};
 companySchema.statics.findByToken = function(token) {
   const Company = this;
   let decoded;

@@ -62,7 +62,7 @@ const create = (req, res) => {
       res.status(200).json({
         job
       }),
-    (e) => {
+    () => {
       res.status(400).json({ error: 'BAD_REQUEST' });
     });
 };
@@ -108,7 +108,7 @@ const updateById = (req, res) => {
 
       res.status(200).json(job);
     })
-    .catch(e => res.status(400).json({ error: 'BAD_REQUEST' }));
+    .catch(() => res.status(400).json({ error: 'BAD_REQUEST' }));
 };
 
 module.exports = {

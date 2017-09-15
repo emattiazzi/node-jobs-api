@@ -27,8 +27,8 @@ const logout = (req, res) => {
   req.company.removeToken(req.token).then(() => {
     res.status(200).send();
   }, () => {
-    res.status(400).send()
-  })
+    res.status(400).send();
+  });
 };
 
 const find = (req, res) => {
@@ -47,14 +47,14 @@ const findById = (req, res) => {
   Company.findById(id)
     .then(company => {
       if (!company) {
-        return res.status(404).json({ message: 'NOT_FOUND' })
+        return res.status(404).json({ message: 'NOT_FOUND' });
       }
       res.status(200).json({company});
     })
     .catch(()=> {
       res.status(400).json({ message: 'BAD_REQUEST' });
-    })
-}
+    });
+};
 const findByToken = (req, res) => {
   res.json(req.company);
 };
