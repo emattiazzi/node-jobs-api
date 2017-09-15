@@ -1,5 +1,6 @@
 const expect = require('chai').expect;
 const request = require('supertest');
+const { ObjectID } = require('mongodb');
 
 const app = require('../../index.js');
 const Company = require('../company.model');
@@ -84,6 +85,29 @@ describe('Company', () => {
     });
   });
 
+  describe('GET /companies/:companyId', done => {
+    it('should return the given company', () => {
+      const id = companies[0]._id;
+
+      request(app)
+        .get(`/companies/${id}`)
+        .expect(200)
+        .expect(res => {
+          expect(res.company).to.be.deep.equal(companies[0]);
+        })
+        .end(done);
+    })
+
+    it('should return 404 for object not found', done => {
+      const id = new ObjectID().toHexString();
+      request(app).get(`/companies/${id}`).expect(404).end(done);
+    });
+
+    it('should return 404 for not valid id', done => {
+      const id = 123;
+      request(app).get(`/companies/${id}`).expect(404).end(done);
+    });
+  });
   describe('POST /login', () => {
     it('should authenticate the company', done => {
       const credentials = {

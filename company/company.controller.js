@@ -1,4 +1,5 @@
 const Company = require('./company.model');
+const { ObjectID } = require('mongodb');
 const { pick } = require('lodash');
 
 const create = (req, res) => {
@@ -36,6 +37,24 @@ const find = (req, res) => {
     .catch(() => res.status(400).json({ message: 'BAD_REQUEST' }));
 };
 
+const findById = (req, res) => {
+  const id = req.params.companyId;
+
+  if (! ObjectID.isValid(id)) {
+    return res.status(404).json({ error: 'NOT_FOUND' });
+  }
+
+  Company.findById(id)
+    .then(company => {
+      if (!company) {
+        return res.status(404).json({ message: 'NOT_FOUND' })
+      }
+      res.status(200).json({company});
+    })
+    .catch(()=> {
+      res.status(400).json({ message: 'BAD_REQUEST' });
+    })
+}
 const findByToken = (req, res) => {
   res.json(req.company);
 };
@@ -58,6 +77,7 @@ module.exports = {
   create,
   find,
   findByToken,
+  findById,
   login,
   logout
 };
