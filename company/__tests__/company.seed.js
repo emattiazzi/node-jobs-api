@@ -8,6 +8,7 @@ const companyTwoId = new ObjectID();
 const companies = [
   {
     _id: companyOneId,
+    name: 'company One',
     email: 'companyOne@test.com',
     password: 'companyOnePass',
     tokens: [{
@@ -17,6 +18,7 @@ const companies = [
   },
   {
     _id: companyTwoId,
+    name: 'company Two',
     email: 'companyTwo@test.com',
     password: 'companyTwoPass',
     tokens: [{
@@ -26,6 +28,7 @@ const companies = [
   },
   {
     _id: new ObjectID(),
+    name: 'company Three',
     email: 'companyThree@test.com',
     password: 'companyThreePass'
   }

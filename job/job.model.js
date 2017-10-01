@@ -1,28 +1,33 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const jobSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true
   },
-  location: {
+  company: {
     type: String
   },
   description: {
     type: String
   },
-  category: {
-    type: String
+  email: {
+    type: String,
+    required: [true, 'EMAIL_REQUIRED'],
+    trim: true,
+    minlength: 1,
+    unique: true,
+    validate: {
+      validator: validator.isEmail,
+      isAsync: false,
+      message: 'EMAIL_NOT_VALID'
+    }
   },
   _creator: {
     type: mongoose.Schema.Types.ObjectId,
     required: true
-  },
-  published: {
-    type: Boolean,
-    default: false
-  },
-  url: String
+  }
 }, {
   timestamps: true
 });

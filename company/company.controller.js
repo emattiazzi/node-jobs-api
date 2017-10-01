@@ -3,10 +3,11 @@ const { ObjectID } = require('mongodb');
 const { pick } = require('lodash');
 
 const create = (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, name } = req.body;
   const company = new Company({
     email,
-    password
+    password,
+    name
   });
 
   company
@@ -67,7 +68,7 @@ const login = (req, res) => {
         res.header('x-auth', token).status(200).json({ company });
       });
     })
-    .catch((e) => {
+    .catch(() => {
       res.status(401).send({ message: 'WRONG_CREDENTIALS' });
     });
 };

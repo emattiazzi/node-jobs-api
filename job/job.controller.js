@@ -35,28 +35,27 @@ const findByCompanyToken = (req,res) => {
   );
 };
 
-const findById = (req, res) => {
+const findById = async (req, res) => {
   const id = req.params.jobId;
 
   if (!ObjectID.isValid(id)) {
     return res.status(404).json({ error: 'NOT_FOUND' });
   }
 
-  Job.findById(id)
-    .then(job => {
-      if (!job) {
-        return res.status(404).json({ error: 'NOT_FOUND' });
-      }
-      res.status(200).json({ job });
-    })
-    .catch(() => {
-      res.status(400).json({ error: 'BAD_REQUEST' });
-    });
+  try {
+    const job = await Job.findById(id);   
+    if (!job) return res.status(404).json({ error: 'NOT_FOUND' });        
+    res.status(200).json({ job });    
+  } catch (e) {
+    res.status(400).json({ error: 'BAD_REQUEST' });    
+  }
 };
 
 const create = (req, res) => {
   const newJob = new Job(pick(req.body, Job.createSafeFields));
   newJob._creator = req.company._id;
+  newJob.company = req.company.name;
+
   newJob.save().then(
     job =>
       res.status(200).json({

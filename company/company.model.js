@@ -7,6 +7,12 @@ const bcrypt = require('bcryptjs');
 const { ObjectID } = require('mongodb');
 
 const companySchema = new mongoose.Schema({
+  name: {
+    type: String,
+    minlength: 1,
+    trim: true,
+    required: true
+  },
   email: {
     type: String,
     required: [true, 'EMAIL_REQUIRED'],
@@ -68,7 +74,7 @@ companySchema.methods.toJSON = function() {
   let company = this;
   let companyObject = company.toObject();
 
-  return pick(companyObject, '_id', 'email');
+  return pick(companyObject, '_id', 'email', 'name');
 };
 
 companySchema.methods.generateAuthToken = function() {
